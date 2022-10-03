@@ -65,6 +65,13 @@ Package for scaffolding a GDI API with NodeJS
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Installation
+
+To install the package, create a `.npmrc` file in the same directory as your `package.json`.
+
+```
+@helsingborg-stad:registry=https://npm.pkg.github.com
+```
 
 ### Run locally
 
