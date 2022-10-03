@@ -1,4 +1,4 @@
-import * as Koa from 'koa'
+import Koa from 'koa'
 import { AuthorizationService } from '../../services/authorization-service'
 import { ApplicationContext, ApplicationModule } from '../../types'
 import { getTokenFromAuthorizationHeader } from './get-token-from-authorization-header'

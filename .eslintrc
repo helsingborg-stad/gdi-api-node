@@ -2,9 +2,10 @@
 	"root": true,
 	"env": {
 		"es6": true,
-		"node": true
+		"node": true,
+		"jest/globals": true
 	},
-	"plugins": [],
+	"plugins": ["jest"],
 	"extends": [
 		"eslint:recommended",
 		"plugin:@typescript-eslint/eslint-recommended",
@@ -13,7 +14,7 @@
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"sourceType": "module",
-		"project": "./tsconfig.json"
+		"project": "./tsconfig.eslint.json"
 	},
 	"rules": {
 		"no-case-declarations": "off",
