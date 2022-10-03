@@ -2,9 +2,9 @@ import { requireJwtUser } from '../../../modules/jwt-user'
 import { ApplicationContext, ApplicationModule } from '../../../types'
 import { makeGqlEndpoint } from '../../make-gql-endpoint'
 import { makeGqlMiddleware } from '../../make-gql-middleware'
-import { GQLModule } from '../../types'
+import { GraphQLModule } from '../../types'
 
-const createTestGqlModule = (): GQLModule => ({
+const createTestGqlModule = (): GraphQLModule => ({
 	schema: `
         type TestData {
             idFromToken: String,

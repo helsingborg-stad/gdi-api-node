@@ -71,9 +71,9 @@
 		},
 		"./services/application": "./dist/services/application.js",
 		"./services/authorization-service": "./dist/services/authorization-service.js",
-		"./gql": {
-			"types": "./dist/gql/index.d.ts",
-			"require": "./dist/gql/index.js"
+		"./graphql": {
+			"types": "./dist/graphql/index.d.ts",
+			"require": "./dist/graphql/index.js"
 		},
 		"./gql/types": "./dist/gql/types.d.ts"
 	}
