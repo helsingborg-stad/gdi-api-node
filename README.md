@@ -18,7 +18,6 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![MIT License][license-shield]][license-url]
 
 
 
@@ -29,7 +28,7 @@
 	<img src="images/hbg-github-logo-combo.png" alt="Logo" width="300">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">GDI-Api-Node</h3>
 
   <p align="center">
     Package for scaffolding a GDI API with NodeJS
@@ -41,6 +40,8 @@
   </p>
 </div>
 
+
+[![MIT License][license-shield]][license-url]
 
 
 <!-- TABLE OF CONTENTS -->
@@ -159,4 +160,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [issues-url]: https://github.com/helsingborg-stad/gdi-api-node/issues
 [license-shield]: https://img.shields.io/github/license/helsingborg-stad/gdi-api-node.svg?style=for-the-badge
-[license-url]: https://github.com/helsingborg-stad/gdi-api-node/blob/master/LICENSE.txt
+[license-url]: https://github.com/helsingborg-stad/gdi-api-node/blob/master/LICENSE
