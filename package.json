@@ -1,8 +1,8 @@
 {
-	"name": "gdi-api-node",
+	"name": "@helsingborg-stad/gdi-api-node",
 	"version": "1.0.0",
 	"description": "",
-	"private": true,
+	"repository": "https://github.com/helsingborg-stad/gdi-api-node.git",
 	"scripts": {
 		"build": "tsc -p .",
 		"prepack": "rm -rf dist/ && npm run build",
