@@ -160,4 +160,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [issues-url]: https://github.com/helsingborg-stad/gdi-api-node/issues
 [license-shield]: https://img.shields.io/github/license/helsingborg-stad/gdi-api-node.svg?style=for-the-badge
-[license-url]: https://github.com/helsingborg-stad/gdi-api-node/blob/master/LICENSE
+[license-url]: https://github.com/helsingborg-stad/gdi-api-node/blob/main/LICENSE
