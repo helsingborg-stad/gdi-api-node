@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import createError from 'http-errors'
-import { getEnv } from '../util/get-env'
+import { getEnv } from '../config'
 
 export interface AuthorizationService {
     /**
