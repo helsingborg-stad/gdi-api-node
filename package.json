@@ -50,6 +50,10 @@
 			"require": "./dist/index.js"
 		},
 		"./types": "./dist/types.d.ts",
+		"./application": {
+			"types": "./dist/application/types.d.ts",
+			"require": "./dist/application/index.js" 
+		},
 		"./modules/*": {
 			"types": "./dist/modules/*",
 			"require": "./dist/modules/*"

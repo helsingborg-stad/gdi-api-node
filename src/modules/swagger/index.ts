@@ -1,5 +1,5 @@
 import { koaSwagger } from 'koa2-swagger-ui'
-import { ApplicationModule, ApplicationContext } from '../../types'
+import { ApplicationModule, ApplicationContext } from '../../application/types'
 
 /**
  * Module that exposes __/swagger__ and __/swagger.json__ with contents derived from current openapi specification

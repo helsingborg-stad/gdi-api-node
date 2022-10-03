@@ -5,7 +5,7 @@ import Router from 'koa-router'
 import OpenAPIBackend, { Context } from 'openapi-backend'
 
 import { Application, ApplicationModule } from './types'
-import { mapValues } from './util/util'
+import { mapValues } from '../util'
 
 const TEST_PORT = 4444
 

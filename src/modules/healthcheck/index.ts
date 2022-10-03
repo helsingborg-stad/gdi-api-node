@@ -1,4 +1,4 @@
-import { ApplicationContext } from '../../types'
+import { ApplicationContext } from '../../application/types'
 
 /** Module for the healthCheck operation (which should be described in our openapi spec) */
 const healthCheckModule = (checkHealth?: ((namespace: string) => Promise<any> | any )) => ({ registerKoaApi }: ApplicationContext): void => registerKoaApi({

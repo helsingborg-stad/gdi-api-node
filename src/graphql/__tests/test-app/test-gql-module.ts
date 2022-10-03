@@ -1,5 +1,5 @@
 import { requireJwtUser } from '../../../modules/jwt-user'
-import { ApplicationContext, ApplicationModule } from '../../../types'
+import { ApplicationContext, ApplicationModule } from '../../../application/types'
 import { makeGqlEndpoint } from '../../make-gql-endpoint'
 import { makeGqlMiddleware } from '../../make-gql-middleware'
 import { GraphQLModule } from '../../types'

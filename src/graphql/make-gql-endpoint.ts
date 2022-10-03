@@ -1,6 +1,6 @@
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { graphql } from 'graphql'
-import { mapValues } from '../util/util'
+import { mapValues } from '../util'
 import { GraphQLEndpoint, GraphQLEndpointArgs, GraphQLModule } from './types'
 
 /** create endpoint function that given parameters resolves against a GraphQL module  */
