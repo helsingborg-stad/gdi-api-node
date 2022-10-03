@@ -71,9 +71,10 @@
 		},
 		"./services/application": "./dist/services/application.js",
 		"./services/authorization-service": "./dist/services/authorization-service.js",
-		"./gql/index": {
+		"./gql": {
 			"types": "./dist/gql/index.d.ts",
 			"require": "./dist/gql/index.js"
-		}
+		},
+		"./gql/types": "./dist/gql/types.d.ts"
 	}
 }
