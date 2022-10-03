@@ -1,6 +1,6 @@
 import OpenAPIBackend from 'openapi-backend'
-import * as Koa from 'koa'
-import * as Router from 'koa-router'
+import Koa from 'koa'
+import Router from 'koa-router'
 import { Server } from 'node:http'
 
 // TODO: Document this
@@ -20,3 +20,5 @@ export interface Application {
     start(port: number|string): Promise<Server>
     run(handler: ((server: Server) => Promise<any>), port?: number): Promise<void>
 }
+
+

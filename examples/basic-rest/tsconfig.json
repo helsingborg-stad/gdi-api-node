@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "rootDir": "src",
+      "module": "commonjs",
+      "target": "ES5",
+      "outDir": "./dist",
+	    "allowJs": true,
+      "moduleResolution": "NodeNext",
+    },
+    "include": [
+      "src/**/*"
+    ],
+    "exclude": ["node_modules", "src/**/*.test.ts"]
+  }

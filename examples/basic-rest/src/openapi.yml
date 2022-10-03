@@ -1,0 +1,58 @@
+openapi: 3.0.0
+info:
+  title: Demo App
+  description: Demo Rest API
+  version: 1.0.0
+paths:
+  /api/v1/hello-world:
+    get:
+      operationId: helloWorld
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TestResponse"
+  /api/v1/{namespace}/healthcheck:
+    get:
+      operationId: healthCheck
+      summary: "Healthcheck of service"
+      tags:
+        - Status of Operations
+      parameters:
+        - name: namespace
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Service is healthy"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type:
+                      string
+
+components:
+  schemas:
+    TestParams:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+        parameters:
+          type: object
+    TestResponse:
+      type: object
+      required:
+        - hello
+      properties:
+        hello:
+          type: string
