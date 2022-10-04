@@ -1,4 +1,4 @@
-export interface GQLModule<TContext = any, TModel = any> {
+export interface GraphQLModule<TContext = any, TModel = any> {
     schema: string
     resolvers: ResolverMap<TContext, TModel> // | ResolverMap<TContext, TModel>[]
 }
@@ -15,11 +15,11 @@ export interface GQLModule<TContext = any, TModel = any> {
 export type ResolverFn<TContext, TModel> = ({ source, ctx, args, info }: {source?: TModel, args?: any, ctx?: TContext, info?: any}) => any
 export type ResolverMap<TContext, TModel> = Record<string, Record<string, ResolverFn<TContext, TModel>>>
 
-export type GQLEndpointArgs<TContext, TModel> = {
+export type GraphQLEndpointArgs<TContext, TModel> = {
     context?: TContext, 
     model?: TModel, 
     query: string, 
     variables: Record<string, any>
 }
 
-export type GQLEndpoint<TContext, TModel> = (args: GQLEndpointArgs<TContext, TModel>) => Promise<any>
+export type GraphQLEndpoint<TContext, TModel> = (args: GraphQLEndpointArgs<TContext, TModel>) => Promise<any>

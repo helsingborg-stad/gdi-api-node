@@ -1,10 +1,10 @@
-import path = require('path');
+import path from 'path'
 import { createApplication } from '../../../application'
 import jwtUserModule from '../../../modules/jwt-user'
 import swaggerModule from '../../../modules/swagger'
 import webFrameworkModule from '../../../modules/web-framework'
 import { createAuthorizationService } from '../../../services/authorization-service'
-import { Application } from '../../../types'
+import { Application } from '../../../application/types'
 import testGqlModule from './test-gql-module'
 
 const createTestApp = (sharedSecret: string): Application => createApplication({

@@ -1,6 +1,6 @@
 {
 	"name": "@helsingborg-stad/gdi-api-node",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "",
 	"repository": "https://github.com/helsingborg-stad/gdi-api-node.git",
 	"scripts": {
@@ -50,6 +50,10 @@
 			"require": "./dist/index.js"
 		},
 		"./types": "./dist/types.d.ts",
+		"./application": {
+			"types": "./dist/application/types.d.ts",
+			"require": "./dist/application/index.js" 
+		},
 		"./modules/*": {
 			"types": "./dist/modules/*",
 			"require": "./dist/modules/*"
@@ -71,9 +75,9 @@
 		},
 		"./services/application": "./dist/services/application.js",
 		"./services/authorization-service": "./dist/services/authorization-service.js",
-		"./gql": {
-			"types": "./dist/gql/index.d.ts",
-			"require": "./dist/gql/index.js"
+		"./graphql": {
+			"types": "./dist/graphql/index.d.ts",
+			"require": "./dist/graphql/index.js"
 		},
 		"./gql/types": "./dist/gql/types.d.ts"
 	}

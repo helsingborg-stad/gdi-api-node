@@ -1,10 +1,10 @@
-import { GQLEndpoint } from './types'
+import { GraphQLEndpoint } from './types'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const debug = require('debug')('application:gql-middleware')
 
 /** Create Koa middleware that executes given GraphQL endpoint, passing {query, variables} */
 export function makeGqlMiddleware<TContext, TModel>(
-	endpoint: GQLEndpoint<TContext, TModel>,
+	endpoint: GraphQLEndpoint<TContext, TModel>,
 	{
 		mapQuery = q => q,
 		mapVariables = v => v,

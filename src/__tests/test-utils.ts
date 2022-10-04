@@ -1,9 +1,9 @@
-import path = require('path')
+import path from 'path'
 import Koa from 'koa'
 import { createApplication } from '../application'
 import swaggerModule from '../modules/swagger'
 import webFrameworkModule from '../modules/web-framework'
-import { ApplicationContext, ApplicationModule } from '../types'
+import { ApplicationContext, ApplicationModule } from '../application/types'
 
 /** register a handler for (Koa captured) errors to prevenmt default console.error logging  */
 const silentErrorsModule = (): ApplicationModule => ({ app }) => app.on('error', () => {})
@@ -18,7 +18,7 @@ const createTestApp = () => createApplication({
 	.use(swaggerModule())
 
 /** Shorthand module for registering API operations in application */
-const registerTestApi = (handlers: Record<string, Koa.Middleware>) => ({ registerKoaApi }: ApplicationContext) => registerKoaApi(handlers)
+const registerTestApi = (handlers: Record<string, Koa.Middleware>): ApplicationModule => ({ registerKoaApi }: ApplicationContext) => registerKoaApi(handlers)
 
 export {
 	createTestApp,

@@ -1,10 +1,10 @@
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { graphql } from 'graphql'
-import { mapValues } from '../util/util'
-import { GQLEndpoint, GQLEndpointArgs, GQLModule } from './types'
+import { mapValues } from '../util'
+import { GraphQLEndpoint, GraphQLEndpointArgs, GraphQLModule } from './types'
 
 /** create endpoint function that given parameters resolves against a GraphQL module  */
-export function makeGqlEndpoint<TContext = any, TModel = any>({ schema, resolvers }: GQLModule<TContext, TModel>): GQLEndpoint<TContext, TModel> {
+export function makeGqlEndpoint<TContext = any, TModel = any>({ schema, resolvers }: GraphQLModule<TContext, TModel>): GraphQLEndpoint<TContext, TModel> {
 	const es = makeExecutableSchema({
 		typeDefs:schema,
 		// wrap resolver going from indexed arguments to parameter object
@@ -13,7 +13,7 @@ export function makeGqlEndpoint<TContext = any, TModel = any>({ schema, resolver
 			entity => mapValues(entity, resolver => (source, args, ctx, info) => resolver({ source, ctx, args, info }))),
 	})
 
-	return ({ context, model, query, variables }: GQLEndpointArgs<TContext, TModel>) => graphql({
+	return ({ context, model, query, variables }: GraphQLEndpointArgs<TContext, TModel>) => graphql({
 		schema: es,
 		source: query,
 		rootValue: model,
