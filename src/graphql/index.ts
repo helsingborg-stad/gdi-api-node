@@ -7,3 +7,5 @@ export {
 	makeGqlEndpoint,
 	makeGqlMiddleware,
 }
+
+export * from './types'

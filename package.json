@@ -1,6 +1,6 @@
 {
 	"name": "@helsingborg-stad/gdi-api-node",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "",
 	"repository": "https://github.com/helsingborg-stad/gdi-api-node.git",
 	"scripts": {
@@ -78,7 +78,6 @@
 		"./graphql": {
 			"types": "./dist/graphql/index.d.ts",
 			"require": "./dist/graphql/index.js"
-		},
-		"./gql/types": "./dist/gql/types.d.ts"
+		}
 	}
 }
