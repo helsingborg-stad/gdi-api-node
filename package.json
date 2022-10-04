@@ -1,6 +1,6 @@
 {
 	"name": "@helsingborg-stad/gdi-api-node",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "",
 	"repository": "https://github.com/helsingborg-stad/gdi-api-node.git",
 	"scripts": {
