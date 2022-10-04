@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { createApplication } from '../../../application'
 import { AuthorizationService, createAuthorizationService } from '../../../services/authorization-service'
-import jwtUserModule from '..'
+import { jwtUserModule } from '..'
 import { StatusCodes } from 'http-status-codes'
 
 const createTestApp = (authorization: AuthorizationService) => createApplication({

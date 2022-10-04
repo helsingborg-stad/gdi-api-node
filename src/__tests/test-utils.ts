@@ -1,8 +1,8 @@
-import path from 'path'
-import Koa from 'koa'
+import * as path from 'path'
+import * as Koa from 'koa'
 import { createApplication } from '../application'
-import swaggerModule from '../modules/swagger'
-import webFrameworkModule from '../modules/web-framework'
+import { swaggerModule } from '../modules/swagger'
+import { webFrameworkModule } from '../modules/web-framework'
 import { ApplicationContext, ApplicationModule } from '../application/types'
 
 /** register a handler for (Koa captured) errors to prevenmt default console.error logging  */

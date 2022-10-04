@@ -4,7 +4,7 @@ import { ApplicationModule, ApplicationContext } from '../../application/types'
 /**
  * Module that exposes __/swagger__ and __/swagger.json__ with contents derived from current openapi specification
  */
-const swaggerModule = (): ApplicationModule => ({ app, router, api }: ApplicationContext) => {
+export const swaggerModule = (): ApplicationModule => ({ app, router, api }: ApplicationContext) => {
 	app.use(koaSwagger({
 		routePrefix: '/swagger',
 		swaggerOptions: {
@@ -18,5 +18,3 @@ const swaggerModule = (): ApplicationModule => ({ app, router, api }: Applicatio
 		})
 		.get('/', ctx => ctx.redirect('/swagger'))
 }
-
-export default swaggerModule

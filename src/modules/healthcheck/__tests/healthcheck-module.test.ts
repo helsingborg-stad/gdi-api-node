@@ -1,9 +1,9 @@
 import { StatusCodes } from 'http-status-codes'
 import request from 'supertest'
-import healthCheckModule from '..'
+import { healthCheckModule } from '..'
 import { createApplication } from '../../../application'
-import swaggerModule from '../../swagger'
-import webFrameworkModule from '../../web-framework'
+import { swaggerModule } from '../../swagger'
+import { webFrameworkModule } from '../../web-framework'
 
 const createTestApp = () => createApplication({
 	openApiDefinitionPath: 'src/__tests/test-app.openapi.yml',

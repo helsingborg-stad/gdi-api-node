@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 import request from 'supertest'
-import swaggerModule from '..'
+import { swaggerModule } from '..'
 import { createApplication } from '../../../application'
 
 const createTestApp = () => createApplication({
