@@ -9,17 +9,33 @@ const createTestGqlModule = (): GraphQLModule => ({
         type TestData {
             idFromToken: String,
         }
+		type SyncAsyncPromise {
+			syncId: String,
+			asyncId: String,
+			promiseId: String,
+			asyncPromiseId: String
+		}
         type Query {
-            testData: TestData
+            testData: TestData,
+			combinationsOfSynAsyncPromise: SyncAsyncPromise
         }
         `,
+	// https://www.graphql-tools.com/docs/resolvers
 	resolvers: {
+		SyncAsyncPromise: {
+			syncId: ({ ctx: { user: { id } } }) => {
+				return id
+			},
+			asyncId: async ({ ctx: { user: { id } } }) => id,
+			promiseId: ({ ctx: { user: { id } } }) => Promise.resolve(id),
+			asyncPromiseId: async ({ ctx: { user: { id } } }) => Promise.resolve(id),
+		},
 		Query: {
-			// https://www.graphql-tools.com/docs/resolvers
-			testData: ({ ctx: { user } }) => {
-				return {
-					idFromToken: user.id,
-				}
+			testData: ({ ctx: { user: { id } } }) => ({
+				idFromToken: id,
+			}),
+			combinationsOfSynAsyncPromise: () => {
+				return ({ dummy_object: true })
 			},
 		},
 	},

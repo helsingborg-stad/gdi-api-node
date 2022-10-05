@@ -10,7 +10,7 @@ export function makeGqlEndpoint<TContext = any, TModel = any>({ schema, resolver
 		// wrap resolver going from indexed arguments to parameter object
 		resolvers: mapValues(
 			resolvers,
-			entity => mapValues(entity, resolver => (source, args, ctx, info) => resolver({ source, ctx, args, info }))),
+			entity => mapValues(entity, field => async (source, args, ctx, info) => field({ source, ctx, args, info }))),
 	})
 
 	return ({ context, model, query, variables }: GraphQLEndpointArgs<TContext, TModel>) => graphql({

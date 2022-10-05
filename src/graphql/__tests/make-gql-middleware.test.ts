@@ -1,6 +1,6 @@
 import { makeGqlMiddleware } from '../make-gql-middleware'
 
-describe('make-gql-middleware', () => {
+describe('makeGqlMiddleware', () => {
 	it('parses {query, parameters}, executes endpoint and returns result as json', async () => {
 		const query = 'query MyQuery {test}'
 		const variables = { a: 1, b:'two' }

@@ -10,6 +10,32 @@ const createAuthorizationHeadersFor = (id: string, secret: string = TEST_SHARED_
 })
 
 describe('GraphQL', () => {
+	it('POST /api/v1/test/graphql handles combinations of sync/async/promise resolvers', () => createTestApp(TEST_SHARED_SECRET)
+		.run(async server => {
+			const { status, body: { data, errors } } = await request(server)
+				.post('/api/v1/test/graphql')
+				.set(createAuthorizationHeadersFor('abc-123'))
+				.send({
+					variables: {},
+					query: `
+						query ASP {
+							combinationsOfSynAsyncPromise {syncId, asyncId, promiseId, asyncPromiseId}
+						}
+					`,
+				})
+			
+			expect(status).toBe(StatusCodes.OK)
+			expect(errors).toBeFalsy()
+			expect(data).toMatchObject({
+				combinationsOfSynAsyncPromise: {
+					syncId: 'abc-123',
+					asyncId: 'abc-123',
+					promiseId: 'abc-123',
+					asyncPromiseId: 'abc-123',
+				},
+			})
+		}))
+
 	it('POST /api/v1/test/graphql validates parameters ({query, variables} = body)', () => createTestApp(TEST_SHARED_SECRET)
 		.run(async server => {
 			const { status, body: { data } } = await request(server)
@@ -23,7 +49,6 @@ describe('GraphQL', () => {
                             }
                         }`,
 					variables: {},
-
 				})
 			expect(status).toBe(StatusCodes.OK)
 			expect(data).toMatchObject({

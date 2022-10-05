@@ -119,7 +119,7 @@ export function createApplication({ openApiDefinitionPath, validateResponse }: C
 					// libraries such as https://github.com/koajs/router/blob/master/API.md#url-parameters
 					// In short, openapi path parameters are parsed and made visible in koa context 
 					ctx.params = c.request.params
-					handler(ctx, next)
+					return handler(ctx, next)
 				})),
 			}
 		}, 
