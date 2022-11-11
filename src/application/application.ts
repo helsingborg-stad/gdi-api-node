@@ -2,10 +2,12 @@ import Debug from 'debug'
 const debug = Debug('application')
 import Koa from 'koa'
 import Router from 'koa-router'
-import OpenAPIBackend, { Context } from 'openapi-backend'
+import OpenAPIBackend from 'openapi-backend'
 
-import { Application, ApplicationModule } from './types'
+import { Application, ApplicationContext, ApplicationModule, ApplicationRunHandler } from './types'
 import { mapValues } from '../util'
+import { apiValidationModule } from './api-validation-module'
+import { apiNotFoundModule } from './api-not-found-module'
 
 const TEST_PORT = 4444
 
@@ -25,41 +27,6 @@ const ensureOnce = <T>(fn: (() => Promise<T>)): (() => Promise<T>) => {
 	}
 }
 
-const performResponseValidation = (c: Context, ctx: Koa.Context) => {
-	/**
-	 * Perform response validation
-	 * 
-	 * Typically, this is done in tests only
-	 * 
-	 * To make life simpler, we only validate 2xx results
-	 * Also, header validation is probably not needed
-	 */
-	const { status } = ctx
-	if (!((status >= 200) && (status < 300))) {
-		return
-	}
-	// https://github.com/anttiviljami/openapi-backend#response-validation
-	([
-		c.api.validateResponse(ctx.body, c.operation),
-		/*
-		c.api.validateResponseHeaders(ctx.headers, c.operation, {
-			statusCode: ctx.status,
-			setMatchType: SetMatchType.Superset,
-		}),
-		*/
-	])
-		.map(({ errors }) => errors)
-		.filter(errors => errors && errors.length)
-		.map(errors => {
-			debug({
-				body: ctx.body,
-				operation: c.operation,
-				errors,
-			})
-			ctx.throw(502)
-		})
-}
-	
 /**
  * ### createWebApplication 
  * create web application by wrapping with reasonable defaults
@@ -77,26 +44,31 @@ export function createApplication({ openApiDefinitionPath, validateResponse }: C
 	// create routes
 	const router = new Router()
 
-	// setup reasonable defaults
-	api.register({
-		// https://github.com/anttiviljami/openapi-backend#quick-start
-		notFound: (c, ctx) => ctx.throw(404),
-		validationFail: (c, ctx) => {
-			ctx.body = { errors: c.validation.errors }
-			ctx.status = 400
-		},
-	})
+	// register modules via .use(...)
+	const modules: ApplicationModule[] = []
+
+	// forward declation of this
+	let application: Application = null as unknown as Application
 	
-	// register response validation if wanted
-	api.register({
-		postResponseHandler: async (c, ctx) => {
-			// turn off all caching of all API responses
-			ctx.set('Cache-Control', 'no-store')
-			return validateResponse && performResponseValidation(c, ctx)
-		},
+	const getContext = (): ApplicationContext => ({
+		app,
+		router,
+		api,
+		application,
+		registerKoaApi: handlers => api.register(mapValues(handlers, handler => (c, ctx, next) => {
+			// we announce the api context to handlers
+			ctx.apiContext = c
+			// we copy params manually to be compatible with 
+			// libraries such as https://github.com/koajs/router/blob/master/API.md#url-parameters
+			// In short, openapi path parameters are parsed and made visible in koa context 
+			ctx.params = c.request.params
+			return handler(ctx, next)
+		})),
 	})
 
 	const init = ensureOnce(async () => {
+		// initialize all modules
+		await modules.reduce((prev, m) => prev.then(() => m(getContext())), Promise.resolve())
 		// finalize api
 		await api.init()
 		return app
@@ -107,37 +79,35 @@ export function createApplication({ openApiDefinitionPath, validateResponse }: C
 			.use((ctx, next) => api.handleRequest(ctx.request, ctx, next))					
 	})
 
-	return {
-		getContext() {
-			return {
-				app,
-				router,
-				api,
-				application: this,
-				registerKoaApi: handlers => api.register(mapValues(handlers, handler => (c, ctx, next) => {
-					// we copy params manually to be compatible with 
-					// libraries such as https://github.com/koajs/router/blob/master/API.md#url-parameters
-					// In short, openapi path parameters are parsed and made visible in koa context 
-					ctx.params = c.request.params
-					return handler(ctx, next)
-				})),
-			}
-		}, 
-		use(module: ApplicationModule) {
-			module(this.getContext())
-			return this
-		},
-		async start(port) {
-			return (await init())
-				.listen(port, () => debug(`Server listening to port ${port}`))
-		},
-		async run(handler, port = TEST_PORT) {
-			const server = await this.start(port)
-			try {
-				await handler(server)
-			} finally {
-				await new Promise((resolve, reject) => server.close(err => err ? reject(err) : resolve(null)))
-			}
-		},
+	const use = (module: ApplicationModule): Application => {
+		// we store the module but defer initialization until last responsible moment
+		// this intruduces additional complexity but allows for use of async modules while still
+		// having a fluent api as in .use(...).use(...)
+		modules.push(module)
+		return application
 	}
+	
+	const start = async (port) => {
+		return (await init())
+			.listen(port, () => debug(`Server listening to port ${port}`))
+	}
+	
+	const run = async (handler: ApplicationRunHandler, port: number = TEST_PORT) => {
+		const server = await start(port)
+		try {
+			await handler(server)
+		} finally {
+			await new Promise((resolve, reject) => server.close(err => err ? reject(err) : resolve(null)))
+		}
+	}
+
+	application = {
+		getContext,
+		use,
+		start,
+		run,
+	}
+	return application
+		.use(apiValidationModule(validateResponse))
+		.use(apiNotFoundModule())
 } 

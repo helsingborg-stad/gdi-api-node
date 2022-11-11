@@ -12,13 +12,15 @@ export interface ApplicationContext {
     registerKoaApi: (handlers: Record<string, Koa.Middleware>) => void
 }
 
-export type ApplicationModule = (context: ApplicationContext) => void
+export type ApplicationModule = (context: ApplicationContext) => any | Promise<any>
+
+export type ApplicationRunHandler = (server: Server) => Promise<any>
 
 export interface Application {
     getContext(): ApplicationContext
     use(module: ApplicationModule): Application
     start(port: number|string): Promise<Server>
-    run(handler: ((server: Server) => Promise<any>), port?: number): Promise<void>
+    run(handler: ApplicationRunHandler, port?: number): Promise<void>
 }
 
 
