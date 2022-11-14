@@ -12,9 +12,7 @@ describe('POST /api/v1/test-operation', () => {
 			// NOTE: validation occurs albeit we didn't 
 			// define a handler for the actual API operation
 			expect(status).toBe(StatusCodes.BAD_REQUEST)
-		})
-
-	)
+		}))
 	it('can validate responses when {validateResponses: true}', () => createTestApp()
 		.use(registerTestApi({
 			testOperation: async (ctx) => {
@@ -29,8 +27,7 @@ describe('POST /api/v1/test-operation', () => {
 			// NOTE: validation occurs albeit we didn't 
 			// define a handler for teh actual API operation
 			expect(status).toBe(StatusCodes.BAD_GATEWAY)
-		})
-	)
+		}))
 	it('works just fine', () => createTestApp()
 		.use(registerTestApi({
 			testOperation: async (ctx) => {
@@ -50,6 +47,5 @@ describe('POST /api/v1/test-operation', () => {
 				id: '1234',
 				answer: 'Please google "what time is it?"',
 			})
-		})
-	)
+		}))
 })

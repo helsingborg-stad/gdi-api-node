@@ -22,6 +22,5 @@ describe('POST /api/v1/test-operation', () => {
 				id: '1234',
 				answer: 'Please google "what time is it?"',
 			})
-		})
-	)
+		}))
 })

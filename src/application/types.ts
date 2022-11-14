@@ -9,6 +9,7 @@ export interface ApplicationContext {
     api: OpenAPIBackend,
     router: Router,
     application: Application,
+    extend(extension: ApplicationExtension)
     registerKoaApi: (handlers: Record<string, Koa.Middleware>) => void
 }
 
@@ -16,11 +17,13 @@ export type ApplicationModule = (context: ApplicationContext) => any | Promise<a
 
 export type ApplicationRunHandler = (server: Server) => Promise<any>
 
+export interface ApplicationExtension {
+    compose: (m: Koa.Middleware) => Koa.Middleware
+}
+
 export interface Application {
     getContext(): ApplicationContext
     use(module: ApplicationModule): Application
     start(port: number|string): Promise<Server>
     run(handler: ApplicationRunHandler, port?: number): Promise<void>
 }
-
-

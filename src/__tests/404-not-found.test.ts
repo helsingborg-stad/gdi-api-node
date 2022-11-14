@@ -9,6 +9,5 @@ describe('GET /missing/resource', () => {
 			const { status } = await request(server)
 				.post('/missing/resource')
 			expect(status).toBe(StatusCodes.NOT_FOUND)
-		})
-	)
+		}))
 })

@@ -2,9 +2,9 @@ import Debug from 'debug'
 const debug = Debug('application')
 import Koa from 'koa'
 import Router from 'koa-router'
-import OpenAPIBackend from 'openapi-backend'
+import OpenAPIBackend, { Handler } from 'openapi-backend'
 
-import { Application, ApplicationContext, ApplicationModule, ApplicationRunHandler } from './types'
+import { Application, ApplicationContext, ApplicationExtension, ApplicationModule, ApplicationRunHandler } from './types'
 import { mapValues } from '../util'
 import { apiValidationModule } from './api-validation-module'
 import { apiNotFoundModule } from './api-not-found-module'
@@ -26,6 +26,10 @@ const ensureOnce = <T>(fn: (() => Promise<T>)): (() => Promise<T>) => {
 		return value
 	}
 }
+
+const compineApplicationExtensions = (prev: ApplicationExtension, next: ApplicationExtension): ApplicationExtension => ({
+	compose: mv => next.compose(prev.compose(mv)),
+})
 
 /**
  * ### createWebApplication 
@@ -49,26 +53,41 @@ export function createApplication({ openApiDefinitionPath, validateResponse }: C
 
 	// forward declation of this
 	let application: Application = null as unknown as Application
+	let koaApi: Record<string, Koa.Middleware> = {}
+	let applicationExtension: ApplicationExtension = {
+		compose: mv => mv,
+	}
+
+	const mapKoaMiddlewareToHandler = (middleware: Koa.Middleware): Handler => (c, ctx, next) => {
+		// we announce the api context to handlers
+		ctx.apiContext = c
+		// we copy params manually to be compatible with 
+		// libraries such as https://github.com/koajs/router/blob/master/API.md#url-parameters
+		// In short, openapi path parameters are parsed and made visible in koa context 
+		ctx.params = c.request.params
+		return middleware(ctx, next)
+	}
 	
 	const getContext = (): ApplicationContext => ({
 		app,
 		router,
 		api,
 		application,
-		registerKoaApi: handlers => api.register(mapValues(handlers, handler => (c, ctx, next) => {
-			// we announce the api context to handlers
-			ctx.apiContext = c
-			// we copy params manually to be compatible with 
-			// libraries such as https://github.com/koajs/router/blob/master/API.md#url-parameters
-			// In short, openapi path parameters are parsed and made visible in koa context 
-			ctx.params = c.request.params
-			return handler(ctx, next)
-		})),
+		registerKoaApi: handlers => {
+			koaApi = { ...koaApi, ...handlers }
+		},
+		extend: extension => (applicationExtension = compineApplicationExtensions(applicationExtension, extension)),
 	})
 
 	const init = ensureOnce(async () => {
 		// initialize all modules
 		await modules.reduce((prev, m) => prev.then(() => m(getContext())), Promise.resolve())
+		// build/compose and register all koa apis
+		const apis = mapValues(
+			mapValues(koaApi, mv => applicationExtension.compose(mv)),
+			mapKoaMiddlewareToHandler)
+		api.register(apis)
+
 		// finalize api
 		await api.init()
 		return app
