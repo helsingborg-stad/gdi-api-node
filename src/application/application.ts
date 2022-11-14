@@ -28,7 +28,8 @@ const ensureOnce = <T>(fn: (() => Promise<T>)): (() => Promise<T>) => {
 }
 
 const compineApplicationExtensions = (prev: ApplicationExtension, next: ApplicationExtension): ApplicationExtension => ({
-	compose: mv => next.compose(prev.compose(mv)),
+	compose: mv => next.compose ? next.compose(prev.compose(mv)) : prev.compose(mv),
+	mapApi: api => next.mapApi ? prev.mapApi(api).then(mapped => next.mapApi(mapped)) : prev.mapApi(api),
 })
 
 /**
@@ -56,6 +57,7 @@ export function createApplication({ openApiDefinitionPath, validateResponse }: C
 	let koaApi: Record<string, Koa.Middleware> = {}
 	let applicationExtension: ApplicationExtension = {
 		compose: mv => mv,
+		mapApi: async api => api,
 	}
 
 	const mapKoaMiddlewareToHandler = (middleware: Koa.Middleware): Handler => (c, ctx, next) => {
@@ -86,7 +88,9 @@ export function createApplication({ openApiDefinitionPath, validateResponse }: C
 		const apis = mapValues(
 			mapValues(koaApi, mv => applicationExtension.compose(mv)),
 			mapKoaMiddlewareToHandler)
-		api.register(apis)
+
+		const mappedApis = await applicationExtension.mapApi(apis)
+		api.register(mappedApis)
 
 		// finalize api
 		await api.init()

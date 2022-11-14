@@ -1,4 +1,4 @@
-import OpenAPIBackend from 'openapi-backend'
+import OpenAPIBackend, { Handler } from 'openapi-backend'
 import Koa from 'koa'
 import Router from 'koa-router'
 import { Server } from 'node:http'
@@ -18,7 +18,8 @@ export type ApplicationModule = (context: ApplicationContext) => any | Promise<a
 export type ApplicationRunHandler = (server: Server) => Promise<any>
 
 export interface ApplicationExtension {
-    compose: (m: Koa.Middleware) => Koa.Middleware
+    compose?: (m: Koa.Middleware) => Koa.Middleware
+    mapApi?: (api: Record<string, Handler>) => Promise<Record<string, Handler>>
 }
 
 export interface Application {
