@@ -28,8 +28,12 @@ const mapErrors = <T>(fn: () => T): T => {
 	}
 }
 
-export const createAuthorizationService = (sharedSecret: string): AuthorizationService => ({
-	tryGetUserFromJwt: token => mapErrors(() => token ? jwt.verify(token, sharedSecret, { complete: true })?.payload : null),
+const createGetDefaultUser = (json: string): any | null => json ? JSON.parse(json) : null
+
+export const createAuthorizationService = (sharedSecret: string, getDefaultUser?: () => any | null): AuthorizationService => ({
+	tryGetUserFromJwt: token => mapErrors(() => token ? jwt.verify(token, sharedSecret, { complete: true })?.payload : getDefaultUser?.() || null),
 })
 
-export const createAuthorizationServiceFromEnv = (): AuthorizationService => createAuthorizationService(getEnv('JWT_SHARED_SECRET'))
+export const createAuthorizationServiceFromEnv = (): AuthorizationService => createAuthorizationService(
+	getEnv('JWT_SHARED_SECRET'),
+	createGetDefaultUser(getEnv('JWT_DEFAULT_USER',{ fallback: '' })))
