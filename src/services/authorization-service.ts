@@ -28,7 +28,7 @@ const mapErrors = <T>(fn: () => T): T => {
 	}
 }
 
-const createGetDefaultUser = (json: string): any | null => json ? JSON.parse(json) : null
+const createGetDefaultUser = (json: string): any | null => json ? () => JSON.parse(json) : null
 
 export const createAuthorizationService = (sharedSecret: string, getDefaultUser?: () => any | null): AuthorizationService => ({
 	tryGetUserFromJwt: token => mapErrors(() => token ? jwt.verify(token, sharedSecret, { complete: true })?.payload : getDefaultUser?.() || null),
