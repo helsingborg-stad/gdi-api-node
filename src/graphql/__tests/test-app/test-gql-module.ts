@@ -15,9 +15,13 @@ const createTestGqlModule = (): GraphQLModule => ({
 			promiseId: String,
 			asyncPromiseId: String
 		}
+		type CacheComputedEntry {
+			id: String
+		}
         type Query {
             testData: TestData,
 			combinationsOfSynAsyncPromise: SyncAsyncPromise
+			cachedComputedEntries(n: Int!, idValue: String!): [CacheComputedEntry]
         }
         `,
 	// https://www.graphql-tools.com/docs/resolvers
@@ -30,6 +34,11 @@ const createTestGqlModule = (): GraphQLModule => ({
 			promiseId: ({ ctx: { user: { id } } }) => Promise.resolve(id),
 			asyncPromiseId: async ({ ctx: { user: { id } } }) => Promise.resolve(id),
 		},
+		CacheComputedEntry: {
+			id: ({ cache }) => {
+				return cache.getOrCreateCachedValue('id', () => 'missing')
+			},
+		},
 		Query: {
 			testData: ({ ctx: { user: { id } } }) => ({
 				idFromToken: id,
@@ -37,6 +46,11 @@ const createTestGqlModule = (): GraphQLModule => ({
 			combinationsOfSynAsyncPromise: () => {
 				return ({ dummy_object: true })
 			},
+			// return a sequnce of integers that the are mapped to computed values
+			cachedComputedEntries: ({ cache, args: { n, idValue } }) => {
+				cache.getOrCreateCachedValue('id', () => idValue)
+				return [...new Array(n)].map(() => ({}))
+			}, 
 		},
 	},
 })
